@@ -25,7 +25,23 @@ public class UsersController : ControllerBase
             return Ok(usuarios);
         }
         return BadRequest("Error al conectar con la API de usuarios");
+    }// GET: api/users/externo/5
+[HttpGet("externo/{id}")]
+public async Task<IActionResult> GetUserById(int id)
+{
+    var client = _httpClientFactory.CreateClient("JsonPlaceholderApi");
+    
+    // Concatenamos el ID a la URL: users/5
+    var response = await client.GetAsync($"users/{id}");
+
+    if (response.IsSuccessStatusCode)
+    {
+        var usuario = await response.Content.ReadFromJsonAsync<User>();
+        return Ok(usuario);
     }
+    
+    return NotFound($"No se encontró el usuario con ID {id}");
+}
 
     // GET: api/users/resumen (Un endpoint propio que solo devuelve nombres y correos)
     [HttpGet("resumen")]
