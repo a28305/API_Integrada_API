@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "J3SZ4NYun3c=",
+  "dgSpecHash": "R+/UxQLdFCY=",
   "success": true,
-  "projectFilePath": "c:\\Users\\jaime\\OneDrive\\Escritorio\\desarrollo_entorno_servidor\\MiApiIntegrada\\MiApiIntegrada.csproj",
+  "projectFilePath": "C:\\Users\\jaime\\OneDrive\\Escritorio\\desarrollo_entorno_servidor\\MiApiIntegrada\\MiApiIntegrada.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\jaime\\.nuget\\packages\\microsoft.aspnetcore.openapi\\8.0.20\\microsoft.aspnetcore.openapi.8.0.20.nupkg.sha512",
     "C:\\Users\\jaime\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",

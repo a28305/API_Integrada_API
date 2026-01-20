@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\jaime\\OneDrive\\Escritorio\\desarrollo_entorno_servidor\\MiApiIntegrada\\MiApiIntegrada.csproj": {}
+    "C:\\Users\\jaime\\OneDrive\\Escritorio\\desarrollo_entorno_servidor\\MiApiIntegrada\\MiApiIntegrada.csproj": {}
   },
   "projects": {
-    "c:\\Users\\jaime\\OneDrive\\Escritorio\\desarrollo_entorno_servidor\\MiApiIntegrada\\MiApiIntegrada.csproj": {
+    "C:\\Users\\jaime\\OneDrive\\Escritorio\\desarrollo_entorno_servidor\\MiApiIntegrada\\MiApiIntegrada.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\jaime\\OneDrive\\Escritorio\\desarrollo_entorno_servidor\\MiApiIntegrada\\MiApiIntegrada.csproj",
+        "projectUniqueName": "C:\\Users\\jaime\\OneDrive\\Escritorio\\desarrollo_entorno_servidor\\MiApiIntegrada\\MiApiIntegrada.csproj",
         "projectName": "MiApiIntegrada",
-        "projectPath": "c:\\Users\\jaime\\OneDrive\\Escritorio\\desarrollo_entorno_servidor\\MiApiIntegrada\\MiApiIntegrada.csproj",
+        "projectPath": "C:\\Users\\jaime\\OneDrive\\Escritorio\\desarrollo_entorno_servidor\\MiApiIntegrada\\MiApiIntegrada.csproj",
         "packagesPath": "C:\\Users\\jaime\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\jaime\\OneDrive\\Escritorio\\desarrollo_entorno_servidor\\MiApiIntegrada\\obj\\",
+        "outputPath": "C:\\Users\\jaime\\OneDrive\\Escritorio\\desarrollo_entorno_servidor\\MiApiIntegrada\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\jaime\\AppData\\Roaming\\NuGet\\NuGet.Config"
