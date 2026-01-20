@@ -487,11 +487,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\jaime\\OneDrive\\Escritorio\\desarrollo_entorno_servidor\\MiApiIntegrada\\MiApiIntegrada.csproj",
+      "projectUniqueName": "c:\\Users\\jaime\\OneDrive\\Escritorio\\desarrollo_entorno_servidor\\MiApiIntegrada\\MiApiIntegrada.csproj",
       "projectName": "MiApiIntegrada",
-      "projectPath": "C:\\Users\\jaime\\OneDrive\\Escritorio\\desarrollo_entorno_servidor\\MiApiIntegrada\\MiApiIntegrada.csproj",
+      "projectPath": "c:\\Users\\jaime\\OneDrive\\Escritorio\\desarrollo_entorno_servidor\\MiApiIntegrada\\MiApiIntegrada.csproj",
       "packagesPath": "C:\\Users\\jaime\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\jaime\\OneDrive\\Escritorio\\desarrollo_entorno_servidor\\MiApiIntegrada\\obj\\",
+      "outputPath": "c:\\Users\\jaime\\OneDrive\\Escritorio\\desarrollo_entorno_servidor\\MiApiIntegrada\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\jaime\\AppData\\Roaming\\NuGet\\NuGet.Config"

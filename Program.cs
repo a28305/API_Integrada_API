@@ -1,13 +1,20 @@
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// 1. REGISTRO DE SERVICIOS (Antes del Build)
+builder.Services.AddControllers(); // ¡IMPORTANTE para que funcionen tus Controllers!
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Aquí registramos el cliente HTTP
+builder.Services.AddHttpClient("JsonPlaceholderApi", client =>
+{
+    client.BaseAddress = new Uri("https://jsonplaceholder.typicode.com/");
+});
+
+// 2. CONSTRUCCIÓN DE LA APP
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// 3. CONFIGURACIÓN DEL PIPELINE (Después del Build)
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -16,29 +23,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+app.UseAuthorization(); // Aunque no tengas login, es buena práctica tenerlo
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+// 4. MAPEO DE RUTAS
+app.MapControllers(); // Esto hace que el PostsController y UsersController funcionen
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
