@@ -1,20 +1,21 @@
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. REGISTRO DE SERVICIOS (Antes del Build)
-builder.Services.AddControllers(); // ¡IMPORTANTE para que funcionen tus Controllers!
+// 1. REGISTRO DE SERVICIOS
+// Importante: AddControllers permite que la API encuentre PostsController y TodosController automáticamente
+builder.Services.AddControllers(); 
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Aquí registramos el cliente HTTP
+// Configuramos el cliente HTTP (esta configuración sirve para Users, Posts y Todos)
 builder.Services.AddHttpClient("JsonPlaceholderApi", client =>
 {
     client.BaseAddress = new Uri("https://jsonplaceholder.typicode.com/");
 });
 
-// 2. CONSTRUCCIÓN DE LA APP
 var app = builder.Build();
 
-// 3. CONFIGURACIÓN DEL PIPELINE (Después del Build)
+// 2. CONFIGURACIÓN DEL PIPELINE
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -22,10 +23,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseAuthorization();
 
-app.UseAuthorization(); // Aunque no tengas login, es buena práctica tenerlo
-
-// 4. MAPEO DE RUTAS
-app.MapControllers(); // Esto hace que el PostsController y UsersController funcionen
+// 3. MAPEO DE RUTAS
+// Esto escanea todos tus controladores y crea los endpoints en Swagger
+app.MapControllers(); 
 
 app.Run();

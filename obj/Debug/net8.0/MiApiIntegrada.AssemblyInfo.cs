@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MiApiIntegrada")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bdd7c0d0ab1bb1c39179c98770b8595926a7971e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7a0f285b1d340bd62f9ab21a089acb6b297f41ad")]
 [assembly: System.Reflection.AssemblyProductAttribute("MiApiIntegrada")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MiApiIntegrada")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
