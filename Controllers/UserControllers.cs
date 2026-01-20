@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MiApiIntegrada.Models;
+using MiApiIntegrada.Models.Dto;
+
 
 [ApiController]
 [Route("api/[controller]")]
@@ -7,7 +9,7 @@ public class UsersController : ControllerBase
 {
     private readonly IHttpClientFactory _httpClientFactory;
 
-    // Simulación de base de datos en memoria para el CRUD local
+    // Base de datos en memoria
     private static List<User> _usuariosLocales = new List<User>();
 
     public UsersController(IHttpClientFactory httpClientFactory)
@@ -15,7 +17,7 @@ public class UsersController : ControllerBase
         _httpClientFactory = httpClientFactory;
     }
 
-    // --- MÉTODOS QUE CONSUMEN LA API EXTERNA ---
+    // --- MÉTODOS API EXTERNA CON DTO ---
 
     [HttpGet("externos")]
     public async Task<IActionResult> GetExternalUsers()
@@ -26,94 +28,104 @@ public class UsersController : ControllerBase
         if (response.IsSuccessStatusCode)
         {
             var usuarios = await response.Content.ReadFromJsonAsync<IEnumerable<User>>();
-            return Ok(usuarios);
+            
+            // Mapeamos a UserDto para ocultar datos técnicos
+            var resultado = usuarios.Select(u => new UserDto
+            {
+                Id = u.Id,
+                NombreCompleto = u.Name,
+                Email = u.Email
+            });
+
+            return Ok(resultado);
         }
-        return BadRequest("Error al conectar con la API de usuarios");
+        return BadRequest("Error al conectar con la API externa");
     }
 
     [HttpGet("externo/{id}")]
-    public async Task<IActionResult> GetUserById(int id)
+    public async Task<IActionResult> GetExternalUserById(int id)
     {
         var client = _httpClientFactory.CreateClient("JsonPlaceholderApi");
         var response = await client.GetAsync($"users/{id}");
 
         if (response.IsSuccessStatusCode)
         {
-            var usuario = await response.Content.ReadFromJsonAsync<User>();
-            return Ok(usuario);
+            var u = await response.Content.ReadFromJsonAsync<User>();
+            var dto = new UserDto { Id = u.Id, NombreCompleto = u.Name, Email = u.Email };
+            return Ok(dto);
         }
-        return NotFound($"No se encontró el usuario con ID {id}");
+        return NotFound($"Usuario externo {id} no encontrado");
     }
 
-    [HttpGet("resumen")]
-    public async Task<IActionResult> GetUsersResumen()
-    {
-        var client = _httpClientFactory.CreateClient("JsonPlaceholderApi");
-        var response = await client.GetAsync("users");
+    // --- MÉTODOS CRUD LOCAL CON DTO ---
 
-        if (response.IsSuccessStatusCode)
-        {
-            var usuarios = await response.Content.ReadFromJsonAsync<IEnumerable<User>>();
-            var resumen = usuarios.Select(u => new {
-                u.Name,
-                u.Email,
-                Ciudad = u.Address?.City ?? "N/A"
-            });
-            return Ok(resumen);
-        }
-        return BadRequest("Error al procesar el resumen");
-    }
-
-    // --- MÉTODOS CRUD PARA DATOS LOCALES ---
-
-    // 1. CREATE: Crear un usuario en nuestra lista local
     [HttpPost]
-    public IActionResult CreateUser([FromBody] User nuevoUsuario)
+    public IActionResult CreateUser([FromBody] UserCreateDto nuevoDto)
     {
-        nuevoUsuario.Id = _usuariosLocales.Count + 1; // Generamos un ID básico
+        // Convertimos el DTO de entrada en nuestro modelo interno User
+        var nuevoUsuario = new User
+        {
+            Id = _usuariosLocales.Count + 1,
+            Name = nuevoDto.Name,
+            Email = nuevoDto.Email,
+            Username = nuevoDto.Username
+        };
+
         _usuariosLocales.Add(nuevoUsuario);
-        
-        // Retorna un 201 Created y la ubicación del nuevo recurso
-        return CreatedAtAction(nameof(GetLocalUserById), new { id = nuevoUsuario.Id }, nuevoUsuario);
+
+        // Devolvemos un UserDto (salida limpia)
+        var respuestaDto = new UserDto 
+        { 
+            Id = nuevoUsuario.Id, 
+            NombreCompleto = nuevoUsuario.Name, 
+            Email = nuevoUsuario.Email 
+        };
+
+        return CreatedAtAction(nameof(GetLocalUserById), new { id = respuestaDto.Id }, respuestaDto);
     }
 
-    // 2. READ: Ver todos los usuarios locales
     [HttpGet("locales")]
     public IActionResult GetLocalUsers()
     {
-        return Ok(_usuariosLocales);
+        var dtos = _usuariosLocales.Select(u => new UserDto
+        {
+            Id = u.Id,
+            NombreCompleto = u.Name,
+            Email = u.Email
+        });
+        return Ok(dtos);
     }
 
-    // Auxiliar para el CreatedAtAction
     [HttpGet("locales/{id}")]
     public IActionResult GetLocalUserById(int id)
     {
-        var usuario = _usuariosLocales.FirstOrDefault(u => u.Id == id);
-        return usuario == null ? NotFound() : Ok(usuario);
+        var u = _usuariosLocales.FirstOrDefault(u => u.Id == id);
+        if (u == null) return NotFound();
+
+        var dto = new UserDto { Id = u.Id, NombreCompleto = u.Name, Email = u.Email };
+        return Ok(dto);
     }
 
-    // 3. UPDATE: Actualizar un usuario local
     [HttpPut("{id}")]
-    public IActionResult UpdateUser(int id, [FromBody] User usuarioActualizado)
+    public IActionResult UpdateUser(int id, [FromBody] UserCreateDto dtoActualizado)
     {
         var existente = _usuariosLocales.FirstOrDefault(u => u.Id == id);
-        if (existente == null) return NotFound("Usuario local no encontrado");
+        if (existente == null) return NotFound();
 
-        existente.Name = usuarioActualizado.Name;
-        existente.Username = usuarioActualizado.Username;
-        existente.Email = usuarioActualizado.Email;
-        
-        return NoContent(); // 204: Actualización exitosa, sin contenido que devolver
+        existente.Name = dtoActualizado.Name;
+        existente.Email = dtoActualizado.Email;
+        existente.Username = dtoActualizado.Username;
+
+        return NoContent();
     }
 
-    // 4. DELETE: Eliminar un usuario local
     [HttpDelete("{id}")]
     public IActionResult DeleteUser(int id)
     {
         var usuario = _usuariosLocales.FirstOrDefault(u => u.Id == id);
-        if (usuario == null) return NotFound("Usuario no encontrado");
+        if (usuario == null) return NotFound();
 
         _usuariosLocales.Remove(usuario);
-        return Ok(new { message = $"Usuario con ID {id} eliminado correctamente" });
+        return Ok(new { message = $"Usuario {id} eliminado" });
     }
 }
